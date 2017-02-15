@@ -10,12 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170215132726) do
+ActiveRecord::Schema.define(version: 20170215154229) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.decimal  "balance",    precision: 14, scale: 2, default: "0.0", null: false
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
+  end
+
+  create_table "transactions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "debit_id",                                            null: false
+    t.integer  "credit_id",                                           null: false
+    t.decimal  "amount",     precision: 14, scale: 2, default: "0.0", null: false
+    t.integer  "event",                               default: 0,     null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
+    t.index ["credit_id"], name: "index_transactions_on_credit_id", using: :btree
+    t.index ["debit_id"], name: "index_transactions_on_debit_id", using: :btree
   end
 
 end

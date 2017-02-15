@@ -2,13 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::AccountsController, type: :controller do
   describe '#create' do
-    let(:params) do
-      {
-        account: {
-          balance: '100'
-        }
-      }
-    end
+    let(:params) { { account: attributes_for(:account) } }
 
     before do
       post :create, params: params
