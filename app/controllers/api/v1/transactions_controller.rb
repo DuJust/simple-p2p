@@ -1,11 +1,11 @@
 class Api::V1::TransactionsController < ApplicationController
   def loan
-    @transaction = Transaction.new(transaction_params.merge(event: Transaction.events[:loan]))
+    @loan = Loan.new(transaction_params)
 
-    if @transaction.save
-      render json: @transaction, status: :created
+    if @loan.valid?
+      render json: @loan, status: :created
     else
-      render json: @transaction.errors, status: :unprocessable_entity
+      render json: @loan.errors, status: :unprocessable_entity
     end
   end
 

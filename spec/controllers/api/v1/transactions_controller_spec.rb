@@ -2,11 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::TransactionsController, type: :controller do
   describe '#loan' do
-    let(:debit) { create(:account) }
-    let(:credit) { create(:account) }
-    let(:params) { { transaction: attributes_for(:transaction, debit_id: debit, credit_id: credit) } }
+    let(:params) { { transaction: attributes_for(:transaction) } }
 
     before do
+      allow_any_instance_of(Loan).to receive(:valid?).and_return(true)
       post :loan, params: params
     end
 
@@ -22,7 +21,8 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
     context 'create failed' do
       before do
-        allow_any_instance_of(Transaction).to receive(:save).and_return(false)
+        allow_any_instance_of(Loan).to receive(:valid?).and_return(false)
+        allow_any_instance_of(Loan).to receive(:errors)
         post :loan, params: params
       end
 
