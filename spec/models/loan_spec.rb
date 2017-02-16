@@ -34,6 +34,10 @@ RSpec.describe Loan do
         it 'should increase balance' do
           expect { subject }.to change { Account.find(debit.id).balance }.from(0).to(50)
         end
+
+        it 'should increase borrow' do
+          expect { subject }.to change { Account.find(debit.id).borrow }.from(0).to(50)
+        end
       end
 
       describe 'credit' do
@@ -44,6 +48,10 @@ RSpec.describe Loan do
 
         it 'should decrease balance' do
           expect { subject }.to change { Account.find(credit.id).balance }.from(100).to(50)
+        end
+
+        it 'should increase lend' do
+          expect { subject }.to change { Account.find(credit.id).lend }.from(0).to(50)
         end
       end
     end

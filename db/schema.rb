@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170215154229) do
+ActiveRecord::Schema.define(version: 20170216075437) do
 
   create_table "accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.decimal  "balance",    precision: 14, scale: 2, default: "0.0", null: false
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
+    t.decimal  "borrow",     precision: 14, scale: 2, default: "0.0", null: false
+    t.decimal  "lend",       precision: 14, scale: 2, default: "0.0", null: false
   end
 
   create_table "transactions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

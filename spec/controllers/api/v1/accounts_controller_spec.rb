@@ -27,4 +27,13 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       it { is_expected.to respond_with(:unprocessable_entity) }
     end
   end
+
+  describe '#show' do
+    let(:account) { create(:account) }
+    before do
+      get :show, params: { id: account.id }
+    end
+
+    it { is_expected.to respond_with(:ok) }
+  end
 end

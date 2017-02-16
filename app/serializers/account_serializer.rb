@@ -1,9 +1,11 @@
 class AccountSerializer < ActiveModel::Serializer
   include ActionView::Helpers::NumberHelper
 
-  attributes :id, :balance
+  attributes :id, :balance, :lend, :borrow
 
-  def balance
-    number_with_precision(object.balance, precision: 2)
+  [:balance, :lend, :borrow].each do |method|
+    define_method method do
+      number_with_precision(object.send(method), precision: 2)
+    end
   end
 end

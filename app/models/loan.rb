@@ -29,9 +29,11 @@ class Loan
   def create_loan_transaction
     ActiveRecord::Base.transaction do
       debit.balance += amount
+      debit.borrow  += amount
       debit.save!
 
       credit.balance -= amount
+      credit.lend    += amount
       credit.save!
 
       transaction.save!
