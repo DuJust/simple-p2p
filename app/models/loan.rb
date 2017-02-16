@@ -24,6 +24,15 @@ class Loan
     false
   end
 
+  def transaction
+    @transaction ||= Transaction.new(
+      debit:  debit,
+      credit: credit,
+      amount: @amount,
+      event:  Transaction.events[:loan]
+    )
+  end
+
   private
 
   def create_loan_transaction
@@ -72,14 +81,5 @@ class Loan
 
   def amount
     @amount ||= BigDecimal.new(@amount_str)
-  end
-
-  def transaction
-    @transaction ||= Transaction.new(
-      debit:  debit,
-      credit: credit,
-      amount: @amount,
-      event:  Transaction.events[:loan]
-    )
   end
 end

@@ -3,9 +3,12 @@ require 'rails_helper'
 RSpec.describe Api::V1::TransactionsController, type: :controller do
   describe '#loan' do
     let(:params) { { transaction: attributes_for(:transaction) } }
+    let(:valid) { true }
 
     before do
-      allow_any_instance_of(Loan).to receive(:execute).and_return(true)
+      allow_any_instance_of(Loan).to receive(:execute).and_return(valid)
+      allow_any_instance_of(Loan).to receive(:transaction)
+      allow_any_instance_of(Loan).to receive(:errors)
       post :loan, params: params
     end
 
@@ -20,11 +23,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
     end
 
     context 'create failed' do
-      before do
-        allow_any_instance_of(Loan).to receive(:execute).and_return(false)
-        allow_any_instance_of(Loan).to receive(:errors)
-        post :loan, params: params
-      end
+      let(:valid) { false }
 
       it { is_expected.to respond_with(:unprocessable_entity) }
     end
@@ -32,9 +31,12 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
   describe '#repay' do
     let(:params) { { transaction: attributes_for(:transaction) } }
+    let(:valid) { true }
 
     before do
-      allow_any_instance_of(Repay).to receive(:execute).and_return(true)
+      allow_any_instance_of(Repay).to receive(:execute).and_return(valid)
+      allow_any_instance_of(Repay).to receive(:transaction)
+      allow_any_instance_of(Repay).to receive(:errors)
       post :repay, params: params
     end
 
@@ -49,11 +51,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
     end
 
     context 'create failed' do
-      before do
-        allow_any_instance_of(Repay).to receive(:execute).and_return(false)
-        allow_any_instance_of(Repay).to receive(:errors)
-        post :repay, params: params
-      end
+      let(:valid) { false }
 
       it { is_expected.to respond_with(:unprocessable_entity) }
     end

@@ -25,6 +25,15 @@ class Repay
     false
   end
 
+  def transaction
+    @transaction ||= Transaction.new(
+      debit:  debit,
+      credit: credit,
+      amount: @amount,
+      event:  Transaction.events[:repay]
+    )
+  end
+
   private
 
   def create_repay_transaction
@@ -94,14 +103,5 @@ class Repay
 
   def amount
     @amount ||= BigDecimal.new(@amount_str)
-  end
-
-  def transaction
-    @transaction ||= Transaction.new(
-      debit:  debit,
-      credit: credit,
-      amount: @amount,
-      event:  Transaction.events[:repay]
-    )
   end
 end

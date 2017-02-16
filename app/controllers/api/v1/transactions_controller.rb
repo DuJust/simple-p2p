@@ -3,7 +3,7 @@ class Api::V1::TransactionsController < ApplicationController
     @loan = Loan.new(transaction_params)
 
     if @loan.execute
-      render json: @loan, status: :created
+      render json: @loan.transaction, status: :created
     else
       render json: @loan.errors, status: :unprocessable_entity
     end
@@ -13,7 +13,7 @@ class Api::V1::TransactionsController < ApplicationController
     @repay = Repay.new(transaction_params)
 
     if @repay.execute
-      render json: @repay, status: :created
+      render json: @repay.transaction, status: :created
     else
       render json: @repay.errors, status: :unprocessable_entity
     end
