@@ -1,24 +1,29 @@
-# README
+Simple P2P
+==========
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Prerequisites
 
-Things you may want to cover:
+- bundler
+- Ruby 2.3+
+- mysql 5.6+
+- phantomjs
 
-* Ruby version
+## Installation
 
-* System dependencies
+1. Install sqlite
+   `brew install mysql`
+2. `bundle install`
+3. Run db rake tasks
+   `rake db:drop db:create db:migrate db:seed`
+4. Run rails application
+   `rails server`
 
-* Configuration
+## Test Suite
 
-* Database creation
+    $ rake
 
-* Database initialization
+### Test Coverage
 
-* How to run the test suite
+If you would like a report of the test coverage, open "coverage/index.html" after running following task:
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+    $ rake
