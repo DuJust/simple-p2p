@@ -9,6 +9,18 @@ class Api::V1::TransactionsController < ApplicationController
     end
   end
 
+  def repay
+    @repay = Repay.new(transaction_params)
+
+    if @repay.execute
+      render json: @repay, status: :created
+    else
+      render json: @repay.errors, status: :unprocessable_entity
+    end
+  end
+
+  private
+
   def transaction_params
     params.require(:transaction).permit(:debit_id, :credit_id, :amount)
   end

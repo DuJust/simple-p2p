@@ -1,5 +1,5 @@
 class Transaction < ApplicationRecord
-  enum event: [:loan]
+  enum event: [:loan, :repay]
 
   belongs_to :debit, class_name: 'Account', foreign_key: 'debit_id'
   belongs_to :credit, class_name: 'Account', foreign_key: 'credit_id'

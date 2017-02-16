@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         end
       end
       post 'transactions/loan', to: 'transactions#loan'
+      post 'transactions/repay', to: 'transactions#repay'
     end
   end
 end

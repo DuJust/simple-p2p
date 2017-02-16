@@ -2,6 +2,8 @@ class Debt
   include ActiveModel::Validations
   alias :read_attribute_for_serialization :send
 
+  attr_accessor :account_a, :account_b
+
   def initialize(options = {})
     @account_a_id = options[:account_a]
     @account_b_id = options[:account_b]
@@ -21,8 +23,8 @@ class Debt
 
   def amount
     @amount ||= begin
-      debits  = account_a.transactions_as_debit.where(credit_id: @account_b_id)
-      credits = account_a.transactions_as_credit.where(debit_id: @account_b_id)
+      debits  = account_a.transactions_as_debit.where(credit: account_b)
+      credits = account_a.transactions_as_credit.where(debit: account_b)
       sum_up(credits) - sum_up(debits)
     end
   end

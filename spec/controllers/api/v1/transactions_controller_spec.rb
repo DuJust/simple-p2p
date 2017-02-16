@@ -29,4 +29,33 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
       it { is_expected.to respond_with(:unprocessable_entity) }
     end
   end
+
+  describe '#repay' do
+    let(:params) { { transaction: attributes_for(:transaction) } }
+
+    before do
+      allow_any_instance_of(Repay).to receive(:execute).and_return(true)
+      post :repay, params: params
+    end
+
+    it do
+      is_expected.to permit(:debit_id, :credit_id, :amount)
+                       .for(:repay, verb: :post, params: { params: params })
+                       .on(:transaction)
+    end
+
+    context 'create successfully' do
+      it { is_expected.to respond_with(:created) }
+    end
+
+    context 'create failed' do
+      before do
+        allow_any_instance_of(Repay).to receive(:execute).and_return(false)
+        allow_any_instance_of(Repay).to receive(:errors)
+        post :repay, params: params
+      end
+
+      it { is_expected.to respond_with(:unprocessable_entity) }
+    end
+  end
 end
