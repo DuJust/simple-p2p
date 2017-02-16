@@ -1,5 +1,6 @@
 class Loan
   include ActiveModel::Validations
+  include Concerns::SafeFind
 
   attr_accessor :amount_str, :debit, :credit
 
@@ -9,9 +10,13 @@ class Loan
     @amount_str = options[:amount]
   end
 
+  safe_find :debit, Account, :@debit_id, with_lock: true
+  safe_find :credit, Account, :@credit_id, with_lock: true
+
   validates_numericality_of :amount_str
-  validate :debit_exist
-  validate :credit_balance, if: :credit_exist
+  validates_presence_of :debit
+  validates_presence_of :credit
+  validate :credit_balance, if: :credit
 
   def execute
     if valid?
@@ -51,32 +56,6 @@ class Loan
 
   def credit_balance
     errors[:credit] << "Balance on credit account is not enough." unless credit.balance >= amount
-  end
-
-  def debit_exist
-    begin
-      debit
-    rescue ActiveRecord::RecordNotFound
-      errors.add(:debit, 'Debit account must exist')
-      false
-    end
-  end
-
-  def credit_exist
-    begin
-      credit
-    rescue ActiveRecord::RecordNotFound
-      errors.add(:credit, 'Credit account must exist')
-      false
-    end
-  end
-
-  def debit
-    @debit ||= Account.lock.find(@debit_id)
-  end
-
-  def credit
-    @credit ||= Account.lock.find(@credit_id)
   end
 
   def amount

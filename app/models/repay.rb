@@ -1,5 +1,6 @@
 class Repay
   include ActiveModel::Validations
+  include Concerns::SafeFind
 
   attr_accessor :amount_str, :debit, :credit
 
@@ -9,9 +10,13 @@ class Repay
     @amount_str = options[:amount]
   end
 
+  safe_find :debit, Account, :@debit_id, with_lock: true
+  safe_find :credit, Account, :@credit_id, with_lock: true
+
   validates_numericality_of :amount_str
-  validate :credit_exist
-  validate :debit_balance, if: :debit_exist
+  validates_presence_of :debit
+  validates_presence_of :credit
+  validate :debit_balance, if: :debit
   validate :debt_between_accounts, if: :debit_and_credit_exist
 
   def execute
@@ -66,39 +71,7 @@ class Repay
   end
 
   def debit_and_credit_exist
-    debit_exist && credit_exist
-  end
-
-  def debit_exist
-    @debit_exist = begin
-      debit
-      true
-    rescue ActiveRecord::RecordNotFound
-      errors.add(:debit, 'Debit account must exist')
-      false
-    end unless instance_variable_defined?(:@debit_exist)
-
-    @debit_exist
-  end
-
-  def credit_exist
-    @credit_exist = begin
-      credit
-      true
-    rescue ActiveRecord::RecordNotFound
-      errors.add(:credit, 'Credit account must exist')
-      false
-    end unless instance_variable_defined?(:@credit_exist)
-
-    @credit_exist
-  end
-
-  def debit
-    @debit ||= Account.lock.find(@debit_id)
-  end
-
-  def credit
-    @credit ||= Account.lock.find(@credit_id)
+    debit && credit
   end
 
   def amount

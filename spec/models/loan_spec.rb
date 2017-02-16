@@ -82,7 +82,7 @@ RSpec.describe Loan do
 
     it 'should validate presence' do
       loan.valid?
-      expect(loan.errors[:debit]).to eq(['Debit account must exist'])
+      expect(loan.errors[:debit]).to eq(["can't be blank"])
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe Loan do
 
     it 'should validate presence' do
       loan.valid?
-      expect(loan.errors[:credit]).to eq(['Credit account must exist'])
+      expect(loan.errors[:credit]).to eq(["can't be blank"])
     end
   end
 

@@ -86,7 +86,7 @@ RSpec.describe Repay do
 
     it 'should validate presence' do
       repay.valid?
-      expect(repay.errors[:debit]).to eq(['Debit account must exist'])
+      expect(repay.errors[:debit]).to eq(["can't be blank"])
     end
   end
 
@@ -95,7 +95,7 @@ RSpec.describe Repay do
 
     it 'should validate presence' do
       repay.valid?
-      expect(repay.errors[:credit]).to eq(['Credit account must exist'])
+      expect(repay.errors[:credit]).to eq(["can't be blank"])
     end
   end
 

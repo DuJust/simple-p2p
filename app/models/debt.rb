@@ -1,5 +1,7 @@
 class Debt
   include ActiveModel::Validations
+  include Concerns::SafeFind
+
   alias :read_attribute_for_serialization :send
 
   attr_accessor :account_a, :account_b
@@ -9,8 +11,11 @@ class Debt
     @account_b_id = options[:account_b]
   end
 
-  validate :account_a_exist
-  validate :account_b_exist
+  safe_find :account_a, Account, :@account_a_id
+  safe_find :account_b, Account, :@account_b_id
+
+  validates_presence_of :account_a
+  validates_presence_of :account_b
 
   def execute
     if valid?
@@ -38,32 +43,6 @@ class Debt
   end
 
   private
-
-  def account_a
-    @account_a ||= Account.find(@account_a_id)
-  end
-
-  def account_b
-    @account_b ||= Account.find(@account_b_id)
-  end
-
-  def account_a_exist
-    begin
-      account_a
-    rescue ActiveRecord::RecordNotFound
-      errors.add(:account_a, 'Account a must exist.')
-      false
-    end
-  end
-
-  def account_b_exist
-    begin
-      account_b
-    rescue ActiveRecord::RecordNotFound
-      errors.add(:account_b, 'Account b must exist.')
-      false
-    end
-  end
 
   def sum_up(collection)
     collection.map(&:amount).reduce(&:+) || 0

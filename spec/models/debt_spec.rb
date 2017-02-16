@@ -46,7 +46,7 @@ RSpec.describe Debt do
 
     it 'should validate presence' do
       debt.valid?
-      expect(debt.errors[:account_a]).to eq(['Account a must exist.'])
+      expect(debt.errors[:account_a]).to eq(["can't be blank"])
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Debt do
 
     it 'should validate presence' do
       debt.valid?
-      expect(debt.errors[:account_b]).to eq(['Account b must exist.'])
+      expect(debt.errors[:account_b]).to eq(["can't be blank"])
     end
   end
 
