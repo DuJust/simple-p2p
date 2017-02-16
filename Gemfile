@@ -52,3 +52,4 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'mysql2'
 gem 'active_model_serializers'
+gem 'dotenv-rails'
