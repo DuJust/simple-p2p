@@ -10,4 +10,6 @@ Rails.application.routes.draw do
       post 'transactions/repay', to: 'transactions#repay'
     end
   end
+
+  get 'docs/index', to: 'docs#index'
 end

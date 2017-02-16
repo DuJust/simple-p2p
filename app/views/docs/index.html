@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #272822;
+  background-color: #f92672;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #f8f8f2;
+}
+.highlight .p, .highlight .pi {
+  color: #f8f8f2;
+}
+.highlight .gi {
+  color: #a6e22e;
+}
+.highlight .gd {
+  color: #f92672;
+}
+.highlight .gh {
+  color: #66d9ef;
+  background-color: #272822;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #ae81ff;
+}
+.highlight .kc {
+  color: #fd971f;
+}
+.highlight .kt {
+  color: #fd971f;
+}
+.highlight .kd {
+  color: #fd971f;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #a6e22e;
+}
+.highlight .sr {
+  color: #a1efe4;
+}
+.highlight .si {
+  color: #cc6633;
+}
+.highlight .se {
+  color: #cc6633;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #66d9ef;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #a6e22e;
+}
+.highlight .ss {
+  color: #a6e22e;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;http&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="http">http</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='#'>Sign Up for a Developer Key</a></li>
+            <li><a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>Simple P2P API reference.</p>
+
+<h1 id="accounts">Accounts</h1>
+
+<h2 id="create-an-account">Create an account</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/v1/accounts</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+
+{
+  "account": {
+    "balance":"100"
+  }
+}
+</code></pre><pre class="highlight http"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="s">{</span>
+<span class="s">    "id": 1,</span>
+<span class="s">    "balance": "100.00",</span>
+<span class="s">    "lend": "0.00",</span>
+<span class="s">    "borrow": "0.00"</span>
+<span class="s">}</span>
+</code></pre>
+<p>You can create a new account sending a POST to <code class="prettyprint">/api/v1/accounts</code> with the necessary attributes. balance is required.</p>
+
+<h2 id="show-an-account">Show an account</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/v1/accounts/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+</code></pre><pre class="highlight http"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="s">{</span>
+<span class="s">    "id": 1,</span>
+<span class="s">    "balance": "100.00",</span>
+<span class="s">    "lend": "0.00",</span>
+<span class="s">    "borrow": "0.00"</span>
+<span class="s">}</span>
+</code></pre>
+<p>You can retrieve an account’s info by sending a GET request to /api/v1/accounts/{id}.</p>
+
+<h2 id="show-debt-between-two-accounts">Show debt between two accounts</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/v1/accounts/debt</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="s">{</span>
+<span class="s">  "account_a": 1,</span>
+<span class="s">  "account_b": 2</span>
+<span class="s">}</span>
+</code></pre><pre class="highlight http"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="s">{</span>
+<span class="s">    "amount": "0.00"</span>
+<span class="s">}</span>
+</code></pre>
+<p>You can GET debt in /api/v1/accounts/debt. account_a and account_b are required. When the amount is larger than 0, it
+ means that account_a lend more money to account_b than account_a borrow money from account_b.</p>
+
+<h1 id="transactions">Transactions</h1>
+
+<h2 id="loan">Loan</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/v1/transactions/loan</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="s">{</span>
+<span class="s">    "transaction": {</span>
+<span class="s">        "debit_id":1,</span>
+<span class="s">        "credit_id":2,</span>
+<span class="s">        "amount":"3"</span>
+<span class="s">    }</span>
+<span class="s">}</span>
+</code></pre><pre class="highlight http"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="s">{</span>
+<span class="s">    "id": 1,</span>
+<span class="s">    "debit_id": 1,</span>
+<span class="s">    "credit_id": 2,</span>
+<span class="s">    "amount": "3.00",</span>
+<span class="s">    "event": "loan"</span>
+<span class="s">}</span>
+</code></pre>
+<p>You can create a loan transaction by POST /api/v1/transactions/loan. debit_id, credit_id and amount are required. 
+debit_id and credit_id could not be the same. amount could not be less than zero. It means that debit borrow money 
+from credit.</p>
+
+<h2 id="repay">Repay</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/v1/transactions/repay</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="s">{</span>
+<span class="s">    "transaction": {</span>
+<span class="s">        "debit_id":1,</span>
+<span class="s">        "credit_id":2,</span>
+<span class="s">        "amount":"3"</span>
+<span class="s">    }</span>
+<span class="s">}</span>
+</code></pre><pre class="highlight http"><code><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="s">{</span>
+<span class="s">    "id": 1,</span>
+<span class="s">    "debit_id": 1,</span>
+<span class="s">    "credit_id": 2,</span>
+<span class="s">    "amount": "3.00",</span>
+<span class="s">    "event": "repay"</span>
+<span class="s">}</span>
+</code></pre>
+<p>You can create a repay transaction by POST /api/v1/transactions/repay. debit_id, credit_id and amount are required. 
+debit_id and credit_id could not be the same. amount could not be less than zero. amount could not be larger than the
+ debt between debit and credit. It means that debit repay the money to credit.</p>
+
+          <h1 id="errors">Errors</h1>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; Your request sucks</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; Your API key is wrong</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; The specified kitten could not be found</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&rsquo;m a teapot</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="http">http</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

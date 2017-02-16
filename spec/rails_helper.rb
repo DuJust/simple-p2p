@@ -1,6 +1,8 @@
 if ENV['COV'] == 'true'
   require 'simplecov'
-  SimpleCov.start 'rails'
+  SimpleCov.start 'rails' do
+    add_filter 'app/docs/slate/config.rb'
+  end
 end
 
 ENV['RAILS_ENV'] ||= 'test'
