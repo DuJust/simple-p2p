@@ -5,7 +5,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
     let(:params) { { transaction: attributes_for(:transaction) } }
 
     before do
-      allow_any_instance_of(Loan).to receive(:valid?).and_return(true)
+      allow_any_instance_of(Loan).to receive(:execute).and_return(true)
       post :loan, params: params
     end
 
@@ -21,7 +21,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
     context 'create failed' do
       before do
-        allow_any_instance_of(Loan).to receive(:valid?).and_return(false)
+        allow_any_instance_of(Loan).to receive(:execute).and_return(false)
         allow_any_instance_of(Loan).to receive(:errors)
         post :loan, params: params
       end

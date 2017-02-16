@@ -1,32 +1,99 @@
 require 'rails_helper'
 
 RSpec.describe Loan do
-  let(:debit) { create(:account) }
-  let(:credit) { create(:account) }
-  let(:transaction_params) { attributes_for(:transaction, debit_id: debit.id, credit_id: credit.id) }
+  let(:debit) { create(:account, balance: 0) }
+  let(:credit) { create(:account, balance: 100) }
+  let(:amount) { '50' }
+  let(:transaction_params) { { amount: amount, debit_id: debit.id, credit_id: credit.id } }
   let(:loan) { Loan.new(transaction_params) }
 
-  describe '#valid?' do
-    subject { loan.valid? }
+  describe '#execute' do
+    subject { loan.execute }
 
-    it { expect { subject }.to change { Transaction.count }.from(0).to(1) }
-    it 'should set new transaction event as loan' do
-      subject
-      expect(Transaction.last.event).to eq('loan')
+    context 'when valid' do
+      it { is_expected.to eq(true) }
+
+      it { expect { subject }.to change { Transaction.count }.from(0).to(1) }
+
+      it 'should create a loan transaction' do
+        subject
+        expect(Transaction.last.event).to eq('loan')
+      end
+
+      it 'should create a transaction with specific amount' do
+        subject
+        expect(Transaction.last.amount).to eq(BigDecimal.new(amount))
+      end
+
+      describe 'debit' do
+        it 'should create a transaction with debit' do
+          subject
+          expect(Transaction.last.debit_id).to eq(debit.id)
+        end
+
+        it 'should increase balance' do
+          expect { subject }.to change { Account.find(debit.id).balance }.from(0).to(50)
+        end
+      end
+
+      describe 'credit' do
+        it 'should create a transaction with credit' do
+          subject
+          expect(Transaction.last.credit_id).to eq(credit.id)
+        end
+
+        it 'should decrease balance' do
+          expect { subject }.to change { Account.find(credit.id).balance }.from(100).to(50)
+        end
+      end
     end
 
-    it { is_expected.to eq(true) }
+    context 'when invalid' do
+      before do
+        allow(loan).to receive(:valid?).and_return(false)
+      end
+
+      it { is_expected.to eq(false) }
+    end
+
+    context 'when transaction error' do
+      before do
+        allow_any_instance_of(Transaction).to receive(:save!).and_raise(Exception)
+      end
+
+      it { is_expected.to eq(false) }
+    end
   end
 
-  describe '#errors' do
-    before do
-      allow_any_instance_of(Transaction).to receive(:save).and_return(true)
-      allow_any_instance_of(Transaction).to receive(:errors).and_return([])
+  describe '#amount_str' do
+    it { expect(loan).to validate_numericality_of(:amount_str) }
+  end
+
+  describe '#debit_account' do
+    let(:debit) { double(:account, id: -1) }
+
+    it 'should validate presence' do
+      loan.valid?
+      expect(loan.errors[:debit]).to eq(['Debit account must exist'])
     end
+  end
 
-    subject { loan.errors }
+  describe '#credit_account' do
+    let(:credit) { double(:account, id: -1) }
 
-    it { is_expected.to eq([]) }
+    it 'should validate presence' do
+      loan.valid?
+      expect(loan.errors[:credit]).to eq(['Credit account must exist'])
+    end
+  end
+
+  describe '#credit_balance' do
+    let(:amount) { (credit.balance + 1).to_s }
+
+    it 'should get balance not enough error' do
+      loan.valid?
+      expect(loan.errors[:credit]).to eq(['Balance on credit account is not enough.'])
+    end
   end
 end
 
