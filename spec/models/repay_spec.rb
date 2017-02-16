@@ -135,5 +135,14 @@ RSpec.describe Repay do
       end
     end
   end
+
+  describe '#same_account' do
+    let(:credit) { debit }
+
+    it 'should get same account error' do
+      repay.valid?
+      expect(repay.errors[:base]).to eq(['could not repay to the same account'])
+    end
+  end
 end
 

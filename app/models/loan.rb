@@ -18,6 +18,7 @@ class Loan
   validates_presence_of :debit
   validates_presence_of :credit
   validate :credit_balance, if: :credit
+  validate :same_account, if: :debit_and_credit_exist
 
   def execute
     if valid?
@@ -59,6 +60,14 @@ class Loan
 
   def credit_balance
     errors[:credit] << "Balance on credit account is not enough." unless credit.balance >= amount
+  end
+
+  def same_account
+    errors[:base] << 'could not loan to the same account' if @debit_id == @credit_id
+  end
+
+  def debit_and_credit_exist
+    debit && credit
   end
 
   def amount

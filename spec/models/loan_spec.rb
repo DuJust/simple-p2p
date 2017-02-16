@@ -103,5 +103,14 @@ RSpec.describe Loan do
       expect(loan.errors[:credit]).to eq(['Balance on credit account is not enough.'])
     end
   end
+
+  describe '#same_account' do
+    let(:credit) { debit }
+
+    it 'should get same account error' do
+      loan.valid?
+      expect(loan.errors[:base]).to eq(['could not loan to the same account'])
+    end
+  end
 end
 

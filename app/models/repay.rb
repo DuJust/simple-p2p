@@ -19,6 +19,7 @@ class Repay
   validates_presence_of :credit
   validate :debit_balance, if: :debit
   validate :debt_between_accounts, if: :debit_and_credit_exist
+  validate :same_account, if: :debit_and_credit_exist
 
   def execute
     if valid?
@@ -71,6 +72,10 @@ class Repay
 
   def debit_balance
     errors[:debit] << "Balance on debit account is not enough." unless debit.balance >= amount
+  end
+
+  def same_account
+    errors[:base] << 'could not repay to the same account' if @debit_id == @credit_id
   end
 
   def debit_and_credit_exist
