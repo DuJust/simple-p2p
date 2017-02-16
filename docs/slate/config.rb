@@ -45,4 +45,4 @@ end
 # If you want Middleman to listen on a different port, you can set that below
 set :port, 4567
 
-set :build_dir, '../../../public/docs/'
+set :build_dir, '../../public/docs/'

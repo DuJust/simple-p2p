@@ -8,6 +8,8 @@ ADD Gemfile.lock /app/Gemfile.lock
 RUN bundle install --jobs 3
 
 ADD . /app
+RUN /app/docs_build.sh
+VOLUME /app/public
 
 EXPOSE 80
 

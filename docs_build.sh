@@ -1,7 +1,7 @@
 #!/bin/bash
 
 app_dir=`pwd`
-cd $app_dir/app/docs/slate
+cd $app_dir/docs/slate
 
 bundle install
 
