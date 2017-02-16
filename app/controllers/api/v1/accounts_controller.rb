@@ -17,6 +17,16 @@ class Api::V1::AccountsController < ApplicationController
     render json: @account
   end
 
+  def debt
+    @debt = Debt.new(params)
+
+    if @debt.execute
+      render json: @debt
+    else
+      render json: @debt.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def api_not_found

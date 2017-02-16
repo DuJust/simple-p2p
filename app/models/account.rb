@@ -1,4 +1,9 @@
 class Account < ApplicationRecord
+  has_many :transactions_as_debit, foreign_key: 'debit_id', class_name: 'Transaction'
+  has_many :transactions_as_credit, foreign_key: 'credit_id', class_name: 'Transaction'
+  has_many :debits, through: :transactions_as_debit
+  has_many :credits, through: :transactions_as_credit
+
   validates :balance,
             presence:     true,
             numericality: true,

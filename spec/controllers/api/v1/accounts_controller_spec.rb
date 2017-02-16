@@ -39,9 +39,32 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     end
 
     context 'when account not exist' do
-      let(:account) { double(:account, id: -1)}
+      let(:account) { double(:account, id: -1) }
 
       it { is_expected.to respond_with(:not_found) }
+    end
+  end
+
+  describe '#debt' do
+    let(:account_a) { double(:account, id: 1) }
+    let(:account_b) { double(:account, id: 2) }
+
+    before do
+      allow_any_instance_of(Debt).to receive(:execute).and_return(valid)
+      allow_any_instance_of(Debt).to receive(:amount).and_return(100)
+      get :debt, params: { account_a: account_a.id, account_b: account_b.id }
+    end
+
+    context 'when debt is valid' do
+      let(:valid) { true }
+
+      it { is_expected.to respond_with(:ok) }
+    end
+
+    context 'when debt is invalid' do
+      let(:valid) { false }
+
+      it { is_expected.to respond_with(:unprocessable_entity) }
     end
   end
 end
