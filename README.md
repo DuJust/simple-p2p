@@ -60,6 +60,6 @@ There're two tables:
 |  amount   | amount in this transaction |
 |   event   |   loan/repay transaction   |
 
-For every p2p transaction, the app will firstly validate account existence and the same account, check account remaining balance with amount and debt between these accounts. Then it will lock two account with mysql database pessimistic lock, update by amount and create a transaction. All the update operations are under by database transaction.
+For every p2p transaction, the app will firstly validate account existence and the difference between the accounts, check the remaining balance of account with the given amount and also the debt between these accounts. Then it will lock two account with mysql database pessimistic lock, update by amount and create a transaction. All the update operations are under by database transaction.
 
 Instead of Fat Model stratery, I use plan old ruby object, `loan`, `repay`and `debt` as Service Object, to handle all business logic. All codes are TDD and test covered.
