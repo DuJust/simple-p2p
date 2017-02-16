@@ -24,18 +24,20 @@ RSpec.describe Debt do
   describe '#amount' do
     context 'when account a borrow money from account b' do
       before do
-        create(:transaction, debit: account_a, credit: account_b, amount: 20)
+        create(:transaction, debit: account_a, credit: account_b, amount: 20, event: 'loan')
+        create(:transaction, debit: account_a, credit: account_b, amount: 10, event: 'repay')
       end
 
-      it { expect(debt.amount).to eq(-20) }
+      it { expect(debt.amount).to eq(-10) }
     end
 
     context 'when account a lend money to account b' do
       before do
-        create(:transaction, debit: account_b, credit: account_a, amount: 20)
+        create(:transaction, debit: account_b, credit: account_a, amount: 20, event: 'loan')
+        create(:transaction, debit: account_b, credit: account_a, amount: 5, event: 'repay')
       end
 
-      it { expect(debt.amount).to eq(20) }
+      it { expect(debt.amount).to eq(15) }
     end
   end
 

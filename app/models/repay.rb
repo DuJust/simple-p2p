@@ -68,6 +68,7 @@ class Repay
       errors.add(:debit, 'Debit account must exist')
       false
     end unless instance_variable_defined?(:@debit_exist)
+
     @debit_exist
   end
 
@@ -79,6 +80,7 @@ class Repay
       errors.add(:credit, 'Credit account must exist')
       false
     end unless instance_variable_defined?(:@credit_exist)
+
     @credit_exist
   end
 
