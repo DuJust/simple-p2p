@@ -34,6 +34,14 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       get :show, params: { id: account.id }
     end
 
-    it { is_expected.to respond_with(:ok) }
+    context 'when account exist' do
+      it { is_expected.to respond_with(:ok) }
+    end
+
+    context 'when account not exist' do
+      let(:account) { double(:account, id: -1)}
+
+      it { is_expected.to respond_with(:not_found) }
+    end
   end
 end
