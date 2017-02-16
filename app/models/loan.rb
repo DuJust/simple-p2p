@@ -1,6 +1,7 @@
 class Loan
   include ActiveModel::Validations
   include Concerns::SafeFind
+  include Concerns::ErrorCollector
 
   attr_accessor :amount_str, :debit, :credit
 
@@ -25,7 +26,9 @@ class Loan
     else
       false
     end
-  rescue Exception => e
+  rescue Exception
+    collect_error(:debit, :credit, :transaction)
+
     false
   end
 

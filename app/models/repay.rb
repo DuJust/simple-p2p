@@ -1,6 +1,7 @@
 class Repay
   include ActiveModel::Validations
   include Concerns::SafeFind
+  include Concerns::ErrorCollector
 
   attr_accessor :amount_str, :debit, :credit
 
@@ -26,7 +27,9 @@ class Repay
     else
       false
     end
-  rescue Exception => e
+  rescue Exception
+    collect_error(:debit, :credit, :transaction)
+
     false
   end
 
