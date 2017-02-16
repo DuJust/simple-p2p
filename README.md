@@ -29,7 +29,7 @@ If you would like a report of the test coverage, open "coverage/index.html" afte
     $ rake
 ### API
 
-I use `slate` for the API reference. 
+I use `slate` for the API reference. You can check [online](http://106.75.47.72/docs/index) or build locally:
 
 ```
 $ ./docs_build.sh
